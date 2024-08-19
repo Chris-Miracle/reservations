@@ -1,25 +1,20 @@
 package main
 
-import "fmt"
+import "log"
+
 
 func main() {
-	fmt.Println("Hello, World")
+	var color string
+	color = "Green"
 
-	var whatToSay string
-	var i int
+	log.Println("Color is", color)
 
-	whatToSay = "Goodbye, World"
-	fmt.Println(whatToSay)
+	changeColor(&color)
 
-	i = 7
-
-	fmt.Println("i is set to", i)
-
-	whatWasSaid, theOtherthing := saySomething()
-
-	fmt.Println("The function returned", whatWasSaid, theOtherthing)
+	log.Println("New Color is", color)
 }
 
-func saySomething() (string, string) {
-	return "Saying something", "Else"
+func changeColor(s *string) {
+	newColor := "Blue"
+	*s = newColor
 }
