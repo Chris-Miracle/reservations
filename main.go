@@ -1,24 +1,56 @@
 package main
 
-import "log"
+import "fmt"
 
-
-type class struct{
-	StudentName string
+type Animal interface {
+	Says() string
+	NumberOfLegs() int
 }
 
-func (c *class) showFirstName() string {
-	return c.StudentName
+type Dog struct {
+	Name  string
+	Breed string
+}
+
+type Gorilla struct {
+	Name          string
+	Color         string
+	NumberOfTeeth int
 }
 
 func main() {
-	var myVar class
-	myVar.StudentName = "John"
-
-	myVar2 := class{
-		StudentName: "Mary",
+	dog := Dog{
+		Name:  "Spot",
+		Breed: "Golden Retriever",
 	}
 
-	log.Println(myVar.showFirstName())
-	log.Println(myVar2.showFirstName())
+	PrintInfo(&dog)
+
+	gorilla := Gorilla{
+		Name:  "Jack",
+		Color: "Silver",
+		NumberOfTeeth: 12,
+	}
+
+	PrintInfo(&gorilla)
+}
+
+func PrintInfo(animal Animal) {
+	fmt.Println("This animal says", animal.Says(), "and has ", animal.NumberOfLegs(), "legs.")
+}
+
+func (dog *Dog) Says() string {
+	return "woof"
+}
+
+func (dog *Dog) NumberOfLegs() int {
+	return 4
+}
+
+func (dog *Gorilla) Says() string {
+	return "Ugh"
+}
+
+func (dog *Gorilla) NumberOfLegs() int {
+	return 2
 }
