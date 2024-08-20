@@ -1,24 +1,24 @@
 package main
 
-import (
-	"log"
-	"time"
-)
+import "log"
 
-type User struct {
-	FirstName   string
-	LastName    string
-	PhoneNumber string
-	Age         int
-	BirthDate   time.Time
+
+type class struct{
+	StudentName string
+}
+
+func (c *class) showFirstName() string {
+	return c.StudentName
 }
 
 func main() {
-	user := User{
-		FirstName:   "Miracle",
-		LastName:    "Chris",
-		PhoneNumber: "0700000000",
+	var myVar class
+	myVar.StudentName = "John"
+
+	myVar2 := class{
+		StudentName: "Mary",
 	}
 
-	log.Println(user.FirstName, user.LastName, user.PhoneNumber)
+	log.Println(myVar.showFirstName())
+	log.Println(myVar2.showFirstName())
 }
