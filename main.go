@@ -1,56 +1,26 @@
 package main
 
-import "fmt"
+import (
+	"log"
 
-type Animal interface {
-	Says() string
-	NumberOfLegs() int
-}
+	"github.com/chris-miracle/reservations/helpers"
+)
 
-type Dog struct {
-	Name  string
-	Breed string
-}
+const numPool = 10000
 
-type Gorilla struct {
-	Name          string
-	Color         string
-	NumberOfTeeth int
+func CalcVal(intChan chan int) {
+	randomNumber := helpers.RandomNumber(numPool)
+
+	intChan <- randomNumber
 }
 
 func main() {
-	dog := Dog{
-		Name:  "Spot",
-		Breed: "Golden Retriever",
-	}
+	intChan := make(chan int)
+	defer close(intChan)
 
-	PrintInfo(&dog)
+	go CalcVal(intChan)
 
-	gorilla := Gorilla{
-		Name:  "Jack",
-		Color: "Silver",
-		NumberOfTeeth: 12,
-	}
+	num := <-intChan
 
-	PrintInfo(&gorilla)
-}
-
-func PrintInfo(animal Animal) {
-	fmt.Println("This animal says", animal.Says(), "and has ", animal.NumberOfLegs(), "legs.")
-}
-
-func (dog *Dog) Says() string {
-	return "woof"
-}
-
-func (dog *Dog) NumberOfLegs() int {
-	return 4
-}
-
-func (dog *Gorilla) Says() string {
-	return "Ugh"
-}
-
-func (dog *Gorilla) NumberOfLegs() int {
-	return 2
+	log.Println(num)
 }
