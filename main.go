@@ -1,26 +1,21 @@
 package main
 
 import (
-	"log"
-
-	"github.com/chris-miracle/reservations/helpers"
+	"fmt"
+	"net/http"
 )
 
-const numPool = 10000
-
-func CalcVal(intChan chan int) {
-	randomNumber := helpers.RandomNumber(numPool)
-
-	intChan <- randomNumber
-}
-
 func main() {
-	intChan := make(chan int)
-	defer close(intChan)
 
-	go CalcVal(intChan)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+		n, err := fmt.Fprintf(w, "Hello, World!")
 
-	num := <-intChan
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	log.Println(num)
+		fmt.Println(fmt.Sprintf("Number of bytes written: %d", n))
+	})
+
+	_ = http.ListenAndServe(":4545", nil)
 }
