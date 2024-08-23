@@ -1,3 +1,4 @@
+{{ define "base" }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,15 +12,22 @@
     />
 
     <title>Document</title>
+
+    {{ block "css" .}}
+
+    {{
+      end
+    }}
   </head>
+
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <h1>This is the about page</h1>
-          <p>This is somee test</p>
-        </div>
-      </div>
-    </div>
+    {{ block "content" .}}
+
+    {{ end }}
+
+    {{ block "js" .}}
+
+    {{ end }}
   </body>
 </html>
+{{ end }}
