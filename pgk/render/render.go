@@ -5,36 +5,44 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"reservations/pgk/config"
 	"text/template"
 )
 
+var app *config.AppConfig
+
+func NewTemplate(appConfig *config.AppConfig) {
+	app = appConfig
+}
+
 // RenderTemplate renders a template
 func RenderTemplate(w http.ResponseWriter, templateName string) {
-	// create a template cache
-	tmpCache, err := createTemplateCache()
-	if err != nil {
-		log.Fatal(err)
+	var tmpCache map[string]*template.Template
+	
+	if app.UseCache {
+		// get the template cache from app config
+		tmpCache = app.TemplateCache
+	} else {
+		tmpCache, _ = CreateTemplateCache()
 	}
+
 	// get requested template from cache
 	template, ok := tmpCache[templateName]
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Template not found in cache")
 	}
 
 	buf := new(bytes.Buffer)
 
-	err = template.Execute(buf, nil)
-	if err != nil {
-		log.Println(err)
-	}
+	_ = template.Execute(buf, nil)
 	// render the template
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	tmpCache := map[string]*template.Template{}
 
 	// get all of the files named *.page.tmpl in the templates directory
