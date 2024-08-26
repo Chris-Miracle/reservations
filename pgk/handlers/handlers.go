@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"reservations/pgk/config"
+	"reservations/pgk/models"
 	"reservations/pgk/render"
 )
 
@@ -26,10 +27,14 @@ func NewHandlers(repository *Repository) {
 
 // Home is the handler for the home page
 func (repository *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
 // About is the handler for the about page
 func (repository *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+	stringMap := make(map[string]string)
+	stringMap["test"] = "Hi Chris."
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+		StrinpMap: stringMap,
+	})
 }
