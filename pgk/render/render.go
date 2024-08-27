@@ -41,15 +41,13 @@ func RenderTemplate(w http.ResponseWriter, templateName string, templateData *mo
 
 	templateData = AddDefaultData(templateData)
 
-	log.Println(templateData)
+	// log.Println(templateData)
 
-	err := template.Execute(buf, templateData)
-	if err != nil {
-		log.Println(err)
-	}
+	_ = template.Execute(buf, templateData)
+	
 
 	// render the template
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 	if err != nil {
 		log.Println(err)
 	}
