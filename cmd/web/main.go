@@ -7,13 +7,26 @@ import (
 	"reservations/pgk/config"
 	"reservations/pgk/handlers"
 	"reservations/pgk/render"
+	"time"
+
+	"github.com/alexedwards/scs/v2"
 )
 
 const portNumber = ":4545"
+var app config.AppConfig
+var session *scs.SessionManager
 
 // main is the entry point for the application
 func main() {
-	var app config.AppConfig
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
 
 	templateCache, err := render.CreateTemplateCache()
 	if err != nil {
