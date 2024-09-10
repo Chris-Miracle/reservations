@@ -2,8 +2,9 @@ package main
 
 import (
 	"net/http"
-	"reservations/pgk/config"
-	"reservations/pgk/handlers"
+
+	"github.com/chris-miracle/reservations/pgk/config"
+	"github.com/chris-miracle/reservations/pgk/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )

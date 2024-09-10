@@ -2,9 +2,10 @@ package handlers
 
 import (
 	"net/http"
-	"reservations/pgk/config"
-	"reservations/pgk/models"
-	"reservations/pgk/render"
+
+	"github.com/chris-miracle/reservations/pgk/config"
+	"github.com/chris-miracle/reservations/pgk/models"
+	"github.com/chris-miracle/reservations/pgk/render"
 )
 
 // Repo is the repository for the handlers

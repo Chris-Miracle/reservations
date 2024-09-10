@@ -5,9 +5,10 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-	"reservations/pgk/config"
-	"reservations/pgk/models"
 	"text/template"
+
+	"github.com/chris-miracle/reservations/pgk/config"
+	"github.com/chris-miracle/reservations/pgk/models"
 )
 
 var app *config.AppConfig
@@ -23,7 +24,7 @@ func AddDefaultData(templateData *models.TemplateData) *models.TemplateData {
 // RenderTemplate renders a template
 func RenderTemplate(w http.ResponseWriter, templateName string, templateData *models.TemplateData) {
 	var tmpCache map[string]*template.Template
-	
+
 	if app.UseCache {
 		// get the template cache from app config
 		tmpCache = app.TemplateCache
@@ -44,7 +45,6 @@ func RenderTemplate(w http.ResponseWriter, templateName string, templateData *mo
 	// log.Println(templateData)
 
 	_ = template.Execute(buf, templateData)
-	
 
 	// render the template
 	_, err := buf.WriteTo(w)

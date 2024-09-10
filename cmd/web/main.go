@@ -4,15 +4,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"reservations/pgk/config"
-	"reservations/pgk/handlers"
-	"reservations/pgk/render"
 	"time"
+
+	"github.com/chris-miracle/reservations/pgk/config"
+	"github.com/chris-miracle/reservations/pgk/handlers"
+	"github.com/chris-miracle/reservations/pgk/render"
 
 	"github.com/alexedwards/scs/v2"
 )
 
 const portNumber = ":4545"
+
 var app config.AppConfig
 var session *scs.SessionManager
 
@@ -46,7 +48,7 @@ func main() {
 	// _ = http.ListenAndServe(portNumber, nil)
 
 	serve := &http.Server{
-		Addr: portNumber,
+		Addr:    portNumber,
 		Handler: routes(&app),
 	}
 
