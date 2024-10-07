@@ -163,6 +163,7 @@
 
 
     <script>
+      let attention = Prompt();
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (() => {
         'use strict'
@@ -185,15 +186,10 @@
       
       // Button Color Changer
       document.getElementById("colorButton").addEventListener("click", function () {
-        // let myParagraph = document.getElementById("myParagraph");
-
-        // if (myParagraph.classList.contains("redText")) {
-        //   myParagraph.classList.remove("redText");
-        // } else {
-        //   myParagraph.classList.add("redText");
-        // }
+        
         // notify("You clicked the button!", "warning");
-        notifyModal("Hello", "This is a modal", "success", "OK");
+        // notifyModal("Hello", "This is a modal", "success", "OK");
+        attention.error({msg: "Hello Sir"});
       });
 
       // Datepicker
@@ -218,6 +214,68 @@
           confirmButtonText: btnText
         })
       }
+
+      function Prompt(){
+        let toast = function(c){
+          const {
+            msg = '',
+            icon = 'success',
+            position = 'top-end',
+          } = c;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            title: msg,
+            position: position,
+            icon: icon,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({})
+        }
+
+        let success = function(c){
+          const {
+            msg = "",
+            title = '',
+            footer = ''
+          } = c;
+          Swal.fire({
+            title: title,
+            text: msg,
+            icon: "success",
+            footer: footer,
+          })
+        }
+
+        let error = function(c){
+          const {
+            msg = "",
+            title = '',
+            footer = ''
+          } = c;
+          Swal.fire({
+            title: title,
+            text: msg,
+            icon: "error",
+            footer: footer,
+          })
+        }
+
+        return {
+          toast: toast,
+          success: success,
+          error: error
+        }
+      }
+
+      
     </script>
   </body>
 </html>
