@@ -159,6 +159,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
     <script src="https://unpkg.com/notie"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <script>
@@ -191,7 +192,8 @@
         // } else {
         //   myParagraph.classList.add("redText");
         // }
-        notify("You clicked the button!", "warning");
+        // notify("You clicked the button!", "warning");
+        notifyModal("Hello", "This is a modal", "success", "OK");
       });
 
       // Datepicker
@@ -206,6 +208,15 @@
           type: type,
           text: message
         });
+      }
+
+      function notifyModal(title, text, icon, btnText) {
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: icon,
+          confirmButtonText: btnText
+        })
       }
     </script>
   </body>
