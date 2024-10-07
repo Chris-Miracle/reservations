@@ -42,6 +42,14 @@
       .notie-container {
         box-shadow: none;
       }
+
+      .datepicker {
+        z-index: 999999999;
+      }
+
+      .datepicker-dropdown {
+        position: relative;
+      }
     </style>
   </head>
 
@@ -186,10 +194,23 @@
       
       // Button Color Changer
       document.getElementById("colorButton").addEventListener("click", function () {
-        
-        // notify("You clicked the button!", "warning");
-        // notifyModal("Hello", "This is a modal", "success", "OK");
-        attention.error({msg: "Hello Sir"});
+        let html = `
+          <form id="check-availability-form" action="" method="post" class="needs-validation" novalidate>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-row" id="reservationDateModal">
+                  <div class="col">
+                    <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival Date">
+                  </div>
+                  <div class="col">
+                    <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          `
+        attention.custom({msg: html, title: "Check Availability"});
       });
 
       // Datepicker
@@ -268,10 +289,51 @@
           })
         }
 
+        async function custom(c){
+          const {
+            msg = '',
+            title = ''
+          } = c;
+
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html: msg,
+            backdrop: false,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              console.log("Opened!");
+              const elem = document.getElementById("reservationDateModal");
+              const picker = new DateRangePicker(elem, {
+                format: 'yyyy-mm-dd',
+                showOnFocua: true
+              })
+              console.log(picker);
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById("start").value,
+                document.getElementById("end").value
+              ]
+            },
+            didOpen: () => {
+              console.log("Done!");
+              return [
+                document.getElementById("start").removeAttribute("disabled"),
+                document.getElementById("end").removeAttribute("disabled"),
+              ]
+            }
+          });
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+          }
+        }
+
         return {
           toast: toast,
           success: success,
-          error: error
+          error: error,
+          custom: custom
         }
       }
 
