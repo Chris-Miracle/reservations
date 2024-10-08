@@ -1,0 +1,41 @@
+{{template "base" .}}
+
+{{define "content"}}
+<div class="container-fluid"></div>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h1 class="mt-5">Search for Availability</h1>
+          <form action="" method="" class="needs-validation" novalidate>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-row" id="reservationDate">
+                  <div class="col">
+                    <input required class="form-control" type="text" name="start" placeholder="Arrival Date">
+                  </div>
+                  <div class="col">
+                    <input required class="form-control" type="text" name="end" placeholder="Departure">  
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr>
+
+            <button type="submit" class="btn btn-primary">Search Availability</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+{{ end }}
+
+{{ define "js" }}
+<script>
+  // Datepicker
+  const elem = document.getElementById("reservationDate");
+  const picker = new DateRangePicker(elem, {
+    format: "yyyy-mm-dd"
+  });
+</script>
+{{ end }}

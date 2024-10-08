@@ -45,3 +45,30 @@ func (repository *Repository) About(w http.ResponseWriter, r *http.Request) {
 		StringMap: stringMap,
 	})
 }
+
+// Reservation is the handler for the reservation page
+func (repository *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "make-reservation.page.tmpl", &models.TemplateData{})
+}
+
+// Generals is the handler for the generals page
+func (repository *Repository) Generals(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "generals.page.tmpl", &models.TemplateData{})
+}
+
+// Majors is the handler for the majors page
+func (repository *Repository) Majors(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "majors.page.tmpl", &models.TemplateData{})
+}
+
+// Availability is the handler for the availability page
+func (repository *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "search-availability.page.tmpl", &models.TemplateData{})
+}
+
+// Contact is the handler for the contact page
+func (repository *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{})
+}
+
+
