@@ -9,6 +9,7 @@ import (
 
 	"github.com/chris-miracle/reservations/pgk/config"
 	"github.com/chris-miracle/reservations/pgk/models"
+	"github.com/justinas/nosurf"
 )
 
 var app *config.AppConfig
@@ -17,12 +18,13 @@ func NewTemplate(appConfig *config.AppConfig) {
 	app = appConfig
 }
 
-func AddDefaultData(templateData *models.TemplateData) *models.TemplateData {
+func AddDefaultData(templateData *models.TemplateData, request *http.Request) *models.TemplateData {
+	templateData.CSRFToken = nosurf.Token(request)
 	return templateData
 }
 
 // RenderTemplate renders a template
-func RenderTemplate(w http.ResponseWriter, templateName string, templateData *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, request *http.Request, templateName string, templateData *models.TemplateData) {
 	var tmpCache map[string]*template.Template
 
 	if app.UseCache {
@@ -40,7 +42,7 @@ func RenderTemplate(w http.ResponseWriter, templateName string, templateData *mo
 
 	buf := new(bytes.Buffer)
 
-	templateData = AddDefaultData(templateData)
+	templateData = AddDefaultData(templateData, request)
 
 	// log.Println(templateData)
 
