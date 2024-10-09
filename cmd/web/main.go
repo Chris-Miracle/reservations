@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/chris-miracle/reservations/pgk/config"
-	"github.com/chris-miracle/reservations/pgk/handlers"
-	"github.com/chris-miracle/reservations/pgk/render"
+	"github.com/chris-miracle/reservations/internal/config"
+	"github.com/chris-miracle/reservations/internal/handlers"
+	"github.com/chris-miracle/reservations/internal/render"
 
 	"github.com/alexedwards/scs/v2"
 )

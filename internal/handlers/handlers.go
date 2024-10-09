@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/chris-miracle/reservations/pgk/config"
-	"github.com/chris-miracle/reservations/pgk/models"
-	"github.com/chris-miracle/reservations/pgk/render"
+	"github.com/chris-miracle/reservations/internal/config"
+	"github.com/chris-miracle/reservations/internal/models"
+	"github.com/chris-miracle/reservations/internal/render"
 )
 
 // Repo is the repository for the handlers

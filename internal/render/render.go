@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/chris-miracle/reservations/pgk/config"
-	"github.com/chris-miracle/reservations/pgk/models"
+	"github.com/chris-miracle/reservations/internal/config"
+	"github.com/chris-miracle/reservations/internal/models"
 	"github.com/justinas/nosurf"
 )
 
