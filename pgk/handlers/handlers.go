@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/chris-miracle/reservations/pgk/config"
@@ -97,7 +96,6 @@ func (repository *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Re
 		fmt.Println("error marshalling", err)
 	}
 
-	log.Println(string(out))
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }

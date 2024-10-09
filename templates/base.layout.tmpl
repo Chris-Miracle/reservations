@@ -205,20 +205,18 @@
             title = ''
           } = c;
 
-          const { value: formValues } = await Swal.fire({
+          const { value: result } = await Swal.fire({
             title: title,
             html: msg,
             backdrop: false,
             focusConfirm: false,
             showCancelButton: true,
             willOpen: () => {
-              console.log("Opened!");
               const elem = document.getElementById("reservationDateModal");
               const picker = new DateRangePicker(elem, {
                 format: 'yyyy-mm-dd',
                 showOnFocua: true
               })
-              console.log(picker);
             },
             preConfirm: () => {
               return [
@@ -227,15 +225,25 @@
               ]
             },
             didOpen: () => {
-              console.log("Done!");
               return [
                 document.getElementById("start").removeAttribute("disabled"),
                 document.getElementById("end").removeAttribute("disabled"),
               ]
             }
           });
-          if (formValues) {
-            Swal.fire(JSON.stringify(formValues));
+
+          if (result) {
+            if (result.dismiss !== Swal.DismissReason.canel) {
+              if (result.value !== "") {
+                if (c.callback !== undefined) {
+                  c.callback(result);
+                }
+              }else{
+                c.callback(false);
+              }
+            }else{
+              c.callback(false);
+            }
           }
         }
 
