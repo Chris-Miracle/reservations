@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/chris-miracle/reservations/internal/config"
+	"github.com/chris-miracle/reservations/internal/forms"
 	"github.com/chris-miracle/reservations/internal/models"
 	"github.com/chris-miracle/reservations/internal/render"
 )
@@ -50,7 +51,13 @@ func (repository *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation is the handler for the reservation page
 func (repository *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+func (repository *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Generals is the handler for the generals page
