@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/chris-miracle/reservations/internal/config"
@@ -57,7 +58,35 @@ func (repository *Repository) Reservation(w http.ResponseWriter, r *http.Request
 }
 
 func (repository *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName: r.Form.Get("lastt_name"),
+		Phone: r.Form.Get("phone"),
+		Email: r.Form.Get("email"),
+	}
+
+
+	form := forms.New(r.PostForm)
+
+	form.Has("first_name", r)
+
+	if !form.Valid(){
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+
+		return
+	}
 }
 
 // Generals is the handler for the generals page
