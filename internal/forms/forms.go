@@ -2,9 +2,10 @@ package forms
 
 import (
 	"net/http"
-	"net/mail"
 	"net/url"
 	"strings"
+
+	"github.com/asaskevich/govalidator"
 )
 
 type Form struct {
@@ -47,12 +48,15 @@ func (f *Form) Has(field string, r *http.Request) bool {
 
 // Email Validity
 func (f *Form) IsEmailValid(field string) {
-	value := f.Get(field)
-	if field == "email" {
-		_, err  := mail.ParseAddress(value)
-		if err != nil {
-			f.Errors.Add(field, "Email is invalid")
-		}
+	// value := f.Get(field)
+	// if field == "email" {
+	// 	_, err  := mail.ParseAddress(value)
+	// 	if err != nil {
+	// 		f.Errors.Add(field, "Email is invalid")
+	// 	}
+	// }
+	if !govalidator.IsEmail(f.Get(field)) {
+		f.Errors.Add(field, "Email is invalid")
 	}
 }
 
