@@ -2,6 +2,7 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -12,7 +13,10 @@ import (
 	"github.com/justinas/nosurf"
 )
 
+var functions = template.FuncMap{}
+
 var app *config.AppConfig
+var pathToTemplates = "./templates"
 
 func NewTemplate(appConfig *config.AppConfig) {
 	app = appConfig
@@ -63,7 +67,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	tmpCache := map[string]*template.Template{}
 
 	// get all of the files named *.page.tmpl in the templates directory
-	pages, err := filepath.Glob("./templates/*.page.tmpl")
+	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl", pathToTemplates))
 	if err != nil {
 		return tmpCache, err
 	}
@@ -72,18 +76,18 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	for _, page := range pages {
 		// get the name of the template
 		name := filepath.Base(page)
-		templateSet, err := template.New(name).ParseFiles(page)
+		templateSet, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
 			return tmpCache, err
 		}
 
-		matches, err := filepath.Glob("./templates/*.layout.tmpl")
+		matches, err := filepath.Glob(fmt.Sprintf("%s/*.layout.tmpl", pathToTemplates))
 		if err != nil {
 			return tmpCache, err
 		}
 
 		if len(matches) > 0 {
-			templateSet, err = templateSet.ParseGlob("./templates/*.layout.tmpl")
+			templateSet, err = templateSet.ParseGlob(fmt.Sprintf("%s/*.layout.tmpl", pathToTemplates))
 			if err != nil {
 				return tmpCache, err
 			}
