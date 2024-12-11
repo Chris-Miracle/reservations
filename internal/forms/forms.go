@@ -1,7 +1,6 @@
 package forms
 
 import (
-	"net/http"
 	"net/url"
 	"strings"
 
@@ -38,8 +37,8 @@ func (f *Form) Required(fields ...string){
 }
 
 // Required checks for required fields
-func (f *Form) Has(field string, r *http.Request) bool {
-	x := r.Form.Get(field)
+func (f *Form) Has(field string) bool {
+	x := f.Get(field)
 	if x == "" {
 		return false
 	}
