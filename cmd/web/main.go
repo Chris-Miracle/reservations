@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/chris-miracle/reservations/internal/config"
 	"github.com/chris-miracle/reservations/internal/handlers"
+	"github.com/chris-miracle/reservations/internal/helpers"
 	"github.com/chris-miracle/reservations/internal/models"
 	"github.com/chris-miracle/reservations/internal/render"
 
@@ -19,6 +21,8 @@ const portNumber = ":4545"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the entry point for the application
 func main() {
@@ -47,6 +51,12 @@ func run() error {
 
 	app.InProduction = false
 
+	infoLog = log.New(os.Stdout,  "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	//  Sessiion Props
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -70,6 +80,7 @@ func run() error {
 	handlers.NewHandlers(repo)
 
 	render.NewTemplate(&app)
+	helpers.NewHelpers(&app)
 
 	return nil
 }
