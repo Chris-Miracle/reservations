@@ -8,6 +8,7 @@ import (
 
 	"github.com/chris-miracle/reservations/internal/config"
 	"github.com/chris-miracle/reservations/internal/forms"
+	"github.com/chris-miracle/reservations/internal/helpers"
 	"github.com/chris-miracle/reservations/internal/models"
 	"github.com/chris-miracle/reservations/internal/render"
 )
@@ -32,22 +33,20 @@ func NewHandlers(repository *Repository) {
 
 // Home is the handler for the home page
 func (repository *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIp := r.RemoteAddr
-	repository.App.Session.Put(r.Context(), "remote_ip", remoteIp)
+	// remoteIp := r.RemoteAddr
+	// repository.App.Session.Put(r.Context(), "remote_ip", remoteIp)
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 // About is the handler for the about page
 func (repository *Repository) About(w http.ResponseWriter, r *http.Request) {
-	stringMap := make(map[string]string)
-	stringMap["test"] = "Hi Chris."
+	// stringMap := make(map[string]string)
+	// stringMap["test"] = "Hi Chris."
 
-	remoteIP := repository.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = remoteIP
+	// remoteIP := repository.App.Session.GetString(r.Context(), "remote_ip")
+	// stringMap["remote_ip"] = remoteIP
 
-	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{
-		StringMap: stringMap,
-	})
+	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{})
 }
 
 // Reservation is the handler for the reservation page
@@ -66,15 +65,15 @@ func (repository *Repository) Reservation(w http.ResponseWriter, r *http.Request
 func (repository *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
-		LastName: r.Form.Get("last_name"),
-		Phone: r.Form.Get("phone"),
-		Email: r.Form.Get("email"),
+		LastName:  r.Form.Get("last_name"),
+		Phone:     r.Form.Get("phone"),
+		Email:     r.Form.Get("email"),
 	}
 
 	form := forms.New(r.PostForm)
@@ -84,7 +83,7 @@ func (repository *Repository) PostReservation(w http.ResponseWriter, r *http.Req
 	form.IsEmailValid("email")
 	form.MinLength("first_name", "last_name")
 
-	if !form.Valid(){
+	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
@@ -141,18 +140,20 @@ func (repository *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Re
 
 	out, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
-		fmt.Println("error marshalling", err)
+		helpers.ServerError(w, err)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }
 
-func (repository *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request){
+func (repository *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := repository.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 
 	if !ok {
-		log.Println("Cannot get item from session")
+		// log.Println("Cannot get item from session")
+		repository.App.ErrorLog.Println("Cannot get item from session")
 		repository.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
@@ -166,4 +167,3 @@ func (repository *Repository) ReservationSummary(w http.ResponseWriter, r *http.
 		Data: data,
 	})
 }
-
